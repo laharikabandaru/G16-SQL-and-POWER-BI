@@ -1,0 +1,268 @@
+vselect * from continents;
+select * from countries;
+select * from car_makers;
+select * from model_details;
+select * from car_names;
+select * from car_details;
+--------------------
+1. SELECT c.COUNTRYNAME, c.CONTINENT
+FROM countries c
+ORDER BY c.CONTINENT;
+---------------------
+2. SELECT CONTINENT, COUNT(COUNTRYID) AS NumberOfCountries
+FROM countries
+GROUP BY CONTINENT;
+------------
+3. SELECT c.COUNTRYNAME
+FROM countries c
+LEFT JOIN car_makers cm ON c.COUNTRYNAME = cm.COUNTRY
+WHERE cm.MAKER IS NULL;
+------------------
+4. SELECT cm.MAKER, c.COUNTRYNAME
+FROM car_makers cm
+JOIN countries c ON cm.COUNTRY = c.COUNTRYID
+WHERE c.COUNTRYNAME = 'japan';
+
+-------------------
+5. SELECT DISTINCT cm.MAKER, c.COUNTRYNAME
+FROM car_makers cm
+JOIN countries c ON cm.COUNTRY = c.COUNTRYID
+WHERE c.COUNTRYNAME IN ('france', 'usa')
+ORDER BY COUNTRYNAME;
+-------------------
+6.SELECT c.COUNTRYNAME, c.CONTINENT
+FROM car_makers cm
+JOIN countries c ON cm.COUNTRY = c.COUNTRYID
+WHERE cm.MAKER = 'volvo';
+-------------------
+7. SELECT md.MODEL
+FROM model_details md
+JOIN car_makers cm ON md.MAKER = cm.ID
+WHERE cm.FULLNAME = 'Ford Motor Company';
+-----------------
+8. SELECT COUNT(md.MODEL) AS NumberOfModels
+FROM model_details md
+JOIN car_makers cm ON md.MAKER = cm.ID
+JOIN countries c ON cm.COUNTRY = c.COUNTRYID
+WHERE c.COUNTRYNAME = 'germany';
+-------------------
+9. SELECT md.MODEL, cm.MAKER, cm.FULLNAME, c.COUNTRYNAME
+FROM model_details md
+JOIN car_makers cm ON md.MAKER = cm.ID
+JOIN countries c ON cm.COUNTRY = c.COUNTRYID
+WHERE c.COUNTRYNAME = 'japan';
+--------------
+10. -- Highest and lowest values for each attribute, along with car maker and geographical info
+
+-- For MPG
+SELECT 
+    cd.ID AS Car_ID,
+    cd.MPG,
+    md.MODEL,
+    cm.FULLNAME AS CarMaker,
+    c.COUNTRYNAME,
+    ct.CONTINENT,
+    'mpg' AS Attribute
+FROM Car_Details cd
+JOIN Model_Details md ON cd.ID = md.MODELID
+JOIN Car_Makers cm ON md.MAKER = cm.ID
+JOIN Countries c ON cm.COUNTRY = c.COUNTRYID
+JOIN Continents ct ON c.CONTINENT = ct.CONTID
+WHERE cd.MPG = (SELECT MAX(MPG) FROM Car_Details)
+   OR cd.MPG = (SELECT MIN(MPG) FROM Car_Details)
+
+UNION ALL
+
+-- For Cylinders
+SELECT 
+    cd.ID AS Car_ID,
+    cd.CYLINDERS,
+    md.MODEL,
+    cm.FULLNAME AS CarMaker,
+    c.COUNTRYNAME,
+    ct.CONTINENT,
+    'cylinders' AS Attribute
+FROM Car_Details cd
+JOIN Model_Details md ON cd.ID = md.MODELID
+JOIN Car_Makers cm ON md.MAKER = cm.ID
+JOIN Countries c ON cm.COUNTRY = c.COUNTRYID
+JOIN Continents ct ON c.CONTINENT = ct.CONTID
+WHERE cd.CYLINDERS = (SELECT MAX(CYLINDERS) FROM Car_Details)
+   OR cd.CYLINDERS = (SELECT MIN(CYLINDERS) FROM Car_Details)
+
+UNION ALL
+
+-- For EDISPL
+SELECT 
+    cd.ID AS Car_ID,
+    cd.EDISPL,
+    md.MODEL,
+    cm.FULLNAME AS CarMaker,
+    c.COUNTRYNAME,
+    ct.CONTINENT,
+    'edispl' AS Attribute
+FROM Car_Details cd
+JOIN Model_Details md ON cd.ID = md.MODELID
+JOIN Car_Makers cm ON md.MAKER = cm.ID
+JOIN Countries c ON cm.COUNTRY = c.COUNTRYID
+JOIN Continents ct ON c.CONTINENT = ct.CONTID
+WHERE cd.EDISPL = (SELECT MAX(EDISPL) FROM Car_Details)
+   OR cd.EDISPL = (SELECT MIN(EDISPL) FROM Car_Details)
+
+UNION ALL
+
+-- For Horsepower
+SELECT 
+    cd.ID AS Car_ID,
+    cd.HORSEPOWER,
+    md.MODEL,
+    cm.FULLNAME AS CarMaker,
+    c.COUNTRYNAME,
+    ct.CONTINENT,
+    'horsepower' AS Attribute
+FROM Car_Details cd
+JOIN Model_Details md ON cd.ID = md.MODELID
+JOIN Car_Makers cm ON md.MAKER = cm.ID
+JOIN Countries c ON cm.COUNTRY = c.COUNTRYID
+JOIN Continents ct ON c.CONTINENT = ct.CONTID
+WHERE cd.HORSEPOWER = (SELECT MAX(HORSEPOWER) FROM Car_Details)
+   OR cd.HORSEPOWER = (SELECT MIN(HORSEPOWER) FROM Car_Details)
+
+UNION ALL
+
+-- For Weight
+SELECT 
+    cd.ID AS Car_ID,
+    cd.WEIGHT,
+    md.MODEL,
+    cm.FULLNAME AS CarMaker,
+    c.COUNTRYNAME,
+    ct.CONTINENT,
+    'weight' AS Attribute
+FROM Car_Details cd
+JOIN Model_Details md ON cd.ID = md.MODELID
+JOIN Car_Makers cm ON md.MAKER = cm.ID
+JOIN Countries c ON cm.COUNTRY = c.COUNTRYID
+JOIN Continents ct ON c.CONTINENT = ct.CONTID
+WHERE cd.WEIGHT = (SELECT MAX(WEIGHT) FROM Car_Details)
+   OR cd.WEIGHT = (SELECT MIN(WEIGHT) FROM Car_Details)
+
+UNION ALL
+
+-- For Acceleration
+SELECT 
+    cd.ID AS Car_ID,
+    cd.ACCEL,
+    md.MODEL,
+    cm.FULLNAME AS CarMaker,
+    c.COUNTRYNAME,
+    ct.CONTINENT,
+    'acceleration' AS Attribute
+FROM Car_Details cd
+JOIN Model_Details md ON cd.ID = md.MODELID
+JOIN Car_Makers cm ON md.MAKER = cm.ID
+JOIN Countries c ON cm.COUNTRY = c.COUNTRYID
+JOIN Continents ct ON c.CONTINENT = ct.CONTID
+WHERE cd.ACCEL = (SELECT MAX(ACCEL) FROM Car_Details)
+   OR cd.ACCEL = (SELECT MIN(ACCEL) FROM Car_Details);
+-----------------------------------------------------------------
+11.SELECT YEAR, COUNT(*) AS Total_Cars
+FROM Car_Details
+GROUP BY YEAR
+ORDER BY Total_Cars DESC;
+--------------------------------------------------
+12. SELECT YEAR, COUNT(*) AS Total_Cars
+FROM Car_Details
+GROUP BY YEAR
+ORDER BY Total_Cars ASC;
+---------------------------------------------
+13. SELECT 
+    CD.YEAR,
+    MIN(CD.MPG) AS Min_MPG,
+    MAX(CD.MPG) AS Max_MPG,
+    AVG(CD.MPG) AS Avg_MPG,
+    
+    MIN(CD.CYLINDERS) AS Min_Cylinders,
+    MAX(CD.CYLINDERS) AS Max_Cylinders,
+    AVG(CD.CYLINDERS) AS Avg_Cylinders,
+    
+    MIN(CD.EDISPL) AS Min_EDISPL,
+    MAX(CD.EDISPL) AS Max_EDISPL,
+    AVG(CD.EDISPL) AS Avg_EDISPL,
+    
+    MIN(CD.HORSEPOWER) AS Min_Horsepower,
+    MAX(CD.HORSEPOWER) AS Max_Horsepower,
+    AVG(CD.HORSEPOWER) AS Avg_Horsepower,
+    
+    MIN(CD.WEIGHT) AS Min_Weight,
+    MAX(CD.WEIGHT) AS Max_Weight,
+    AVG(CD.WEIGHT) AS Avg_Weight,
+    
+    MIN(CD.ACCEL) AS Min_Accel,
+    MAX(CD.ACCEL) AS Max_Accel,
+    AVG(CD.ACCEL) AS Avg_Accel
+    
+FROM Car_Details CD
+JOIN Car_Names CN 
+ON CD.ID = CN.ID
+GROUP BY CD.YEAR
+ORDER BY CD.YEAR;
+-------------------------
+14. For mean:
+    
+SELECT 
+    AVG(HORSEPOWER) AS Mean_Horsepower,
+    AVG(WEIGHT) AS Mean_Weight,
+    AVG(ACCEL) AS Mean_Accel
+FROM Car_Details;
+
+For Standard Deviation:
+    
+SELECT 
+    STDDEV(HORSEPOWER) AS StdDev_Horsepower,
+    STDDEV(WEIGHT) AS StdDev_Weight,
+    STDDEV(ACCEL) AS StdDev_Accel
+FROM Car_Details;
+
+For median:
+    
+SELECT 
+    MEDIAN(HORSEPOWER) AS Median_Horsepower,
+    MEDIAN(WEIGHT) AS Median_Weight,
+    MEDIAN(ACCEL) AS Median_Accel
+FROM Car_Details;
+
+Understanding the Values:
+Mean (Average):
+
+The mean provides a central value of the data.
+Horsepower: If the mean horsepower is higher, it suggests that most cars have high-performance engines, which might indicate sports or luxury cars.
+Weight: A high mean weight suggests that the cars are generally heavier, possibly due to larger vehicles like SUVs or trucks.
+Accel: The mean acceleration gives insight into the overall performance of the cars in terms of speed.
+Median:
+
+The median represents the middle value of the data when it is ordered. This is a better indicator of the central tendency when the data is skewed (has outliers).
+Horsepower: If the median is significantly lower than the mean, it suggests that there are a few high-performance cars with very high horsepower, skewing the average upwards.
+Weight: Similarly, if the median is lower than the mean, it might indicate that lighter cars are in the majority, but there are a few heavy cars pulling the average up.
+Accel: The median gives insight into the typical acceleration performance of the cars in the dataset, removing any extremes.
+Standard Deviation:
+
+The standard deviation measures the spread or variability in the data.
+Horsepower: A high standard deviation indicates that there is significant variability in the horsepower of the cars. Some cars might be low-power, while others are high-performance.
+Weight: A high standard deviation in weight suggests a diverse range of vehicles, including both light and heavy cars.
+Accel: A high standard deviation in acceleration could suggest varying performance, with some cars being quick and others slower.
+
+
+Summary:
+Mean gives the average value, but may be skewed by outliers.
+Median provides a better measure of central tendency when there are outliers.
+Standard Deviation shows how much the values vary from the mean, indicating the diversity or consistency in the data.
+These measures help to understand the overall distribution and tendencies of horsepower, weight, and acceleration in the car dataset
+-----------------------------------
+15. 
+
+
+
+
+
+
