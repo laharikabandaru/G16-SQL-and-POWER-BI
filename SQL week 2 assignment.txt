@@ -1,4 +1,4 @@
-vselect * from continents;
+select * from continents;
 select * from countries;
 select * from car_makers;
 select * from model_details;
@@ -233,33 +233,11 @@ SELECT
 FROM Car_Details;
 
 Understanding the Values:
-Mean (Average):
-
-The mean provides a central value of the data.
-Horsepower: If the mean horsepower is higher, it suggests that most cars have high-performance engines, which might indicate sports or luxury cars.
-Weight: A high mean weight suggests that the cars are generally heavier, possibly due to larger vehicles like SUVs or trucks.
-Accel: The mean acceleration gives insight into the overall performance of the cars in terms of speed.
-Median:
-
-The median represents the middle value of the data when it is ordered. This is a better indicator of the central tendency when the data is skewed (has outliers).
-Horsepower: If the median is significantly lower than the mean, it suggests that there are a few high-performance cars with very high horsepower, skewing the average upwards.
-Weight: Similarly, if the median is lower than the mean, it might indicate that lighter cars are in the majority, but there are a few heavy cars pulling the average up.
-Accel: The median gives insight into the typical acceleration performance of the cars in the dataset, removing any extremes.
-Standard Deviation:
-
-The standard deviation measures the spread or variability in the data.
-Horsepower: A high standard deviation indicates that there is significant variability in the horsepower of the cars. Some cars might be low-power, while others are high-performance.
-Weight: A high standard deviation in weight suggests a diverse range of vehicles, including both light and heavy cars.
-Accel: A high standard deviation in acceleration could suggest varying performance, with some cars being quick and others slower.
-
-
-Summary:
 Mean gives the average value, but may be skewed by outliers.
 Median provides a better measure of central tendency when there are outliers.
 Standard Deviation shows how much the values vary from the mean, indicating the diversity or consistency in the data.
 These measures help to understand the overall distribution and tendencies of horsepower, weight, and acceleration in the car dataset
------------------------------------
-15. 
+----------------------------------
 
 
 
